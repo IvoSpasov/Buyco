@@ -3,56 +3,69 @@ pragma solidity ^0.4.18;
 contract Buyco {
     struct User {
         string name;
+        string phone;
+        string email;
     }
 
     struct Item {
         uint id;
         string title;
         string description;
-        uint price;
+        uint priceInEth;
         address sellerAddress;
         bool isSold;
     }
 
     mapping(address => User) private users;
-    mapping(uint => Item) private itemsForSale;
-    uint private itemId = 0;
+    Item[] private itemsForSale;
 
-    function addUser(string name, address addr) public {
-        User newUser;
+    function addUser(string name) public {
+        User memory newUser;
         newUser.name = name;
-
-        // what if user exist already?
-        users[addr] = newUser;
+        users[msg.sender] = newUser;
     }
 
+    // TODO: Do I need an address parameter?
     function getUser(address addr) public view returns(string) {
-        User foundUser = users[addr];
-        // if not found?
+        User memory foundUser = users[addr];
         return foundUser.name;
     }
 
-    function addItem(string title, address sellerAddress) public {
-        Item newItem;
+    function addItem(string title, uint priceInEth) public {
+        // user must be registered
+        require(bytes(users[msg.sender].name).length != 0);
+        Item memory newItem;
         newItem.title = title;
-        newItem.sellerAddress = sellerAddress;
+        newItem.priceInEth = priceInEth * 1 ether;
+        newItem.sellerAddress = msg.sender;
         newItem.isSold = false;
-
-        itemsForSale[itemId++] = newItem;
+        itemsForSale.push(newItem);
     }
 
-    function buyItem(uint id, address buyer) public payable {
-        // id is mandatory and check for valid id
-
-        // The buyer must pay the exact value of the item
-        require(itemsForSale[id].price == msg.value);
-
-        itemsForSale[id].isSold = true; // if ture -> hide from ui
-        transferFundsToSeller(id);
+    function getItems() public view returns(Item[]) {
+        return itemsForSale;
     }
 
-    function transferFundsToSeller(uint soldItemId) {
+    function buyItem(uint itemId) public payable {
+        // user must be registered
+        require(bytes(users[msg.sender].name).length != 0);
+        // item id must be valid
+        require(0 <= itemId && itemId < itemsForSale.length);
+        // item musn't be sold
+        require(!itemsForSale[itemId].isSold);
+        // buyer must pay the exact value of the item
+        require(itemsForSale[itemId].priceInEth == msg.value);
+
+        itemsForSale[itemId].isSold = true; // if ture -> hide from ui
+        transferFundsToSeller(itemId);
+    }
+
+    // deduct 5% from item price and transfer funds to seller
+    function transferFundsToSeller(uint soldItemId) private {
+        uint totalAmount = itemsForSale[soldItemId].priceInEth;
+        uint fivePercentOfTotalAmount = totalAmount * 5 / 100;
+        uint deductedAmount = totalAmount - fivePercentOfTotalAmount; 
         address sellerAddress = itemsForSale[soldItemId].sellerAddress;
-        // deduct 5% from price and transfer amount to seller
+        sellerAddress.transfer(deductedAmount);        
     }
 }

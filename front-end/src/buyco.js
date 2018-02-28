@@ -1,8 +1,8 @@
 $(document).ready(async function () {
     let providers = ethers.providers;
     let provider = new providers.JsonRpcProvider('http://localhost:8545');
-    let contractAddress = '0x28a1951006b509f6d07a3f5d0646b9e536c22e33';
-    let contractAbi = [
+    const contractAddress = '0x28a1951006b509f6d07a3f5d0646b9e536c22e33';
+    const contractAbi = [
         {
             "constant": false,
             "inputs": [
@@ -141,7 +141,6 @@ $(document).ready(async function () {
     async function getUserFromContract(address) {
         let contract = new ethers.Contract(contractAddress, contractAbi, provider);
         let result = await contract.getUser(address);
-        console.log('got user');
         console.log(result);
         console.log(result[0]);
     }
@@ -153,13 +152,13 @@ $(document).ready(async function () {
         // TODO: add message on screen for success
     }
 
-    $('#new-wallet').click(function () {
+    $('#new-wallet').click(() => {
         let password = $('#new-wallet-password').val();
         processNewWallet(password);
         $('#new-wallet-password').val('');
     });
 
-    $('#import-wallet').click(function () {
+    $('#import-wallet').click(() => {
         let privateKey = $('#private-key').val();
         let password = $('#imported-wallet-password').val();
         processWalletImport(privateKey, password);
@@ -167,7 +166,7 @@ $(document).ready(async function () {
         $('#imported-wallet-password').val('');
     });
 
-    $('#register').click(function () {
+    $('#register').click(() => {
         let nameOfUser = $('#name').val();
         let walletPassword = $('#register-unlock-password').val();
         registerUser(nameOfUser, walletPassword);
