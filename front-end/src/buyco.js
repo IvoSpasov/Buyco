@@ -104,9 +104,21 @@ $(document).ready(async function () {
         return await ethers.Wallet.fromEncryptedWallet(walletJson, walletPassword);
     }
 
-    function saveWallet(walletJson) {
+    function saveWalletToLocalStorage(walletJson) {
         localStorage.wallet = walletJson;
     }
+
+    async function createNewWallet(walletPassword) {
+        let wallet = createRandomWallet();
+        let walletJson = await encryptWallet(wallet, walletPassword);
+        saveWalletToLocalStorage(walletJson);
+    }
+
+    $('#new-wallet').click(function () {
+        let password = $('#wallet-password').val();
+        createNewWallet(password);
+        $('#wallet-password').val('');
+    });
 
     async function addUserToContract(name, wallet) {
         wallet.provider = provider;
@@ -124,11 +136,6 @@ $(document).ready(async function () {
     }
 
     async function registerUser(name, walletPassword) {
-        let wallet = createRandomWallet();
-        let walletJson = await encryptWallet(wallet, walletPassword);
-
-        saveWallet(walletJson);
-
         // who is going to pay? wallet must have non zero balance. Use owners wallet?
         await addUserToContract(name, wallet);
         //await getUserFromContract(wallet.address);
