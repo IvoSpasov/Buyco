@@ -10,16 +10,26 @@
 </head>
 
 <body>
-    <h1>Register:</h1>
+    <h1>Registeration</h1>
     <p>If you want to buy or sell someting you need to register.</p>
     <p>If you want to register you'll need a wallet, so that you can pay a small registration fee.</p>
-    <p>We'll create a new wallet for you. It'll be password encrypted so please provide a password.</p>
+    <p>We can create a new wallet for you. It'll be password encrypted so please provide a password.</p>
     <label>Wallet password.</label>
-    <input type="password" id='wallet-password'>
-    <input type="button" id="new-wallet" value="Create a new wallet.">
+    <input type="password" id='new-wallet-password'>
+    <input type="button" id="new-wallet" value="Create a new wallet">
     <p>Don't forget to put some eth in the wallet before registering.</p>
+    <hr/>
+    <p>Or you can import your own wallet. Your private key will be stored only in the current browser and won't be sent anywhere else.</p>
+    <p>Please also provide a password so that you wallet is encryptedly saved in the browser.</p>
+    <lable>Private key</lable>
+    <input type="text" id="private-key">
+    <label>Wallet password.</label>
+    <input type="password" id='imported-wallet-password'>
+    <input type="button" id="import-wallet" value="Import my wallet">
+    <hr/>
+    <p>After adding a wallet you can finally register.</p>
     <lable>Name</lable>
-    <input type="text">
+    <input type="text" id="name">
     <input type="button" id="register" value="Register">
 </body>
 

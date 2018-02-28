@@ -92,6 +92,10 @@ $(document).ready(async function () {
         }
     ];
 
+    function createWallet(privateKey) {
+        return new ethers.Wallet('0x' + privateKey);
+    }
+
     function createRandomWallet() {
         return ethers.Wallet.createRandom();
     }
@@ -104,21 +108,28 @@ $(document).ready(async function () {
         return await ethers.Wallet.fromEncryptedWallet(walletJson, walletPassword);
     }
 
-    function saveWalletToLocalStorage(walletJson) {
+    function saveWalletToStorage(walletJson) {
         localStorage.wallet = walletJson;
     }
 
-    async function createNewWallet(walletPassword) {
-        let wallet = createRandomWallet();
-        let walletJson = await encryptWallet(wallet, walletPassword);
-        saveWalletToLocalStorage(walletJson);
+    function getWalletFromStorage() {
+        return localStorage.wallet;
     }
 
-    $('#new-wallet').click(function () {
-        let password = $('#wallet-password').val();
-        createNewWallet(password);
-        $('#wallet-password').val('');
-    });
+    async function processNewWallet(walletPassword) {
+        let wallet = createRandomWallet();
+        let walletJson = await encryptWallet(wallet, walletPassword);
+        saveWalletToStorage(walletJson);
+        // TODO: add message on screen for success
+        // TODO: save to disk
+    }
+
+    async function processWalletImport(privateKey, walletPassword) {
+        let wallet = createWallet(privateKey);
+        let walletJson = await encryptWallet(wallet, walletPassword);
+        saveWalletToStorage(walletJson);
+        // TODO: add message on screen for success
+    }
 
     async function addUserToContract(name, wallet) {
         wallet.provider = provider;
@@ -129,17 +140,36 @@ $(document).ready(async function () {
 
     async function getUserFromContract(address) {
         let contract = new ethers.Contract(contractAddress, contractAbi, provider);
-        var result = await contract.getUser(address);
+        let result = await contract.getUser(address);
         console.log('got user');
         console.log(result);
         console.log(result[0]);
     }
 
-    async function registerUser(name, walletPassword) {
-        // who is going to pay? wallet must have non zero balance. Use owners wallet?
-        await addUserToContract(name, wallet);
-        //await getUserFromContract(wallet.address);
+    async function registerUser(name) {
+        let userWalletJson = getWalletFromStorage();
+        let userWallet = decryptWallet(userWalletJson);
+        await addUserToContract(name, userWallet);
+        // TODO: add message on screen for success
     }
 
-    //await registerUser('Ivo', 'pass');
+    $('#new-wallet').click(function () {
+        let password = $('#new-wallet-password').val();
+        processNewWallet(password);
+        $('#new-wallet-password').val('');
+    });
+
+    $('#import-wallet').click(function () {
+        let privateKey = $('#private-key').val();
+        let password = $('#imported-wallet-password').val();
+        processWalletImport(privateKey, password);
+        $('#private-key').val('');
+        $('#imported-wallet-password').val('');
+    });
+
+    $('#register').click(function () {
+        let nameOfUser = $('#name').val();
+        registerUser(nameOfUser);
+        $('#name').val('');
+    });
 });
