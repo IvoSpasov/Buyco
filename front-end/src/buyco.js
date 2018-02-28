@@ -146,9 +146,9 @@ $(document).ready(async function () {
         console.log(result[0]);
     }
 
-    async function registerUser(name) {
+    async function registerUser(name, walletPassword) {
         let userWalletJson = getWalletFromStorage();
-        let userWallet = decryptWallet(userWalletJson);
+        let userWallet = await decryptWallet(userWalletJson, walletPassword);
         await addUserToContract(name, userWallet);
         // TODO: add message on screen for success
     }
@@ -169,7 +169,9 @@ $(document).ready(async function () {
 
     $('#register').click(function () {
         let nameOfUser = $('#name').val();
-        registerUser(nameOfUser);
+        let walletPassword = $('#register-unlock-password').val();
+        registerUser(nameOfUser, walletPassword);
         $('#name').val('');
+        $('#register-unlock-password').val('');
     });
 });
