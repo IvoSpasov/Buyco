@@ -3,9 +3,6 @@ pragma solidity ^0.4.18;
 contract Buyco {
     struct User {
         string name;
-        string email;
-        string phone;
-        string password; // hash password        
     }
 
     struct Item {
@@ -29,7 +26,7 @@ contract Buyco {
         users[addr] = newUser;
     }
 
-    function getUser(address addr) public returns(string) {
+    function getUser(address addr) public view returns(string) {
         User foundUser = users[addr];
         // if not found?
         return foundUser.name;
