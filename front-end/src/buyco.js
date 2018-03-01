@@ -1,7 +1,7 @@
 $(document).ready(async function () {
     let providers = ethers.providers;
     let provider = new providers.JsonRpcProvider('http://localhost:8545');
-    const contractAddress = '0x28a1951006b509f6d07a3f5d0646b9e536c22e33';
+    const contractAddress = '0x014b09c545ab29b6a3fb41663fcf6887321dac31';
     const contractAbi = [
         {
             "constant": false,
@@ -149,24 +149,29 @@ $(document).ready(async function () {
         // TODO: add message on screen for success
     }
 
-    async function addUserToContract(name, wallet) {
-        wallet.provider = provider;
-        let contract = new ethers.Contract(contractAddress, contractAbi, wallet);
-        let result = await contract.addUser(name, wallet.address);
-        console.log('Added user: ' + result);
+    async function getContractForWriting(walletPassword) {
+        let userWalletJson = getWalletFromStorage();
+        let userWallet = await decryptWallet(userWalletJson, walletPassword);
+        userWallet.provider = provider;
+        let contract = new ethers.Contract(contractAddress, contractAbi, userWallet);
+        return contract;
+    }
+
+    function getContractForReading() {
+        return new ethers.Contract(contractAddress, contractAbi, provider);
     }
 
     async function getUserFromContract(address) {
-        let contract = new ethers.Contract(contractAddress, contractAbi, provider);
+        let contract = getContractForReading();
         let result = await contract.getUser(address);
         console.log(result);
         console.log(result[0]);
     }
 
     async function registerUser(name, walletPassword) {
-        let userWalletJson = getWalletFromStorage();
-        let userWallet = await decryptWallet(userWalletJson, walletPassword);
-        await addUserToContract(name, userWallet);
+        let contract = await getContractForWriting(walletPassword);
+        let result = await contract.addUser(name); // shoud I await here?
+        console.log('Added user: ' + result);
         // TODO: add message on screen for success
     }
 
