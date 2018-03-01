@@ -1,6 +1,7 @@
 $(document).ready(async function () {
     let providers = ethers.providers;
     let provider = new providers.JsonRpcProvider('http://localhost:8545');
+    const oneEth = 1000000000000000000;
     const contractAddress = '0xfb99fba92a471dfaf27321a579dc38bfa3ada0a7';
     const contractAbi = [
         {
@@ -183,6 +184,17 @@ $(document).ready(async function () {
         // TODO: add message on screen for success
     }
 
+    async function getItemsForSale() {
+        let contract = getContractForReading();
+        let itemsLength = await contract.getItemsLength();
+        let items = [];
+        for (let i = 0; i < itemsLength; i++) {
+            items.push(await contract.getItem(i));
+        }
+
+        return items;
+    }
+
     $('#new-wallet').click(() => {
         let password = $('#new-wallet-password').val();
         processNewWallet(password);
@@ -214,4 +226,13 @@ $(document).ready(async function () {
         $('#item-price').val('');
         $('#add-item-unlock-password').val('');
     });
+
+    function addItemsForSaleToDom(itemsForSale) {
+        $.each(itemsForSale, (index, item) => {
+            let itemPriceInEth = item.priceInEth / oneEth;
+            $('#items').append('<p><b>Item #' + index + '</b> Title: ' + item.title + ' -> price: ' + itemPriceInEth + ' eth.</p>');
+        });
+    }
+
+    addItemsForSaleToDom(await getItemsForSale());
 });
