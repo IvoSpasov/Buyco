@@ -2,7 +2,7 @@ $(document).ready(async function () {
     let providers = ethers.providers;
     let provider = new providers.JsonRpcProvider('http://localhost:8545');
     const oneEth = 1000000000000000000;
-    const contractAddress = '0xfb99fba92a471dfaf27321a579dc38bfa3ada0a7';
+    const contractAddress = '0x9eeb48e97e2ab18436918f9da9c36b845c79f59a';
     const contractAbi = [
         {
             "constant": false,
@@ -84,7 +84,7 @@ $(document).ready(async function () {
                     "type": "string"
                 },
                 {
-                    "name": "priceInEth",
+                    "name": "priceInWei",
                     "type": "uint256"
                 },
                 {
@@ -229,7 +229,7 @@ $(document).ready(async function () {
 
     function addItemsForSaleToDom(itemsForSale) {
         $.each(itemsForSale, (index, item) => {
-            let itemPriceInEth = item.priceInEth / oneEth;
+            let itemPriceInEth = item.priceInWei / oneEth;
             $('#items').append('<p><b>Item #' + index + '</b> Title: ' + item.title + ' -> price: ' + itemPriceInEth + ' eth.</p>');
         });
     }

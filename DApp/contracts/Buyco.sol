@@ -11,7 +11,7 @@ contract Buyco {
         uint id;
         string title;
         string description;
-        uint priceInEth;
+        uint priceInWei;
         address sellerAddress;
         bool isSold;
     }
@@ -35,7 +35,7 @@ contract Buyco {
         require(bytes(users[msg.sender].name).length != 0);
         Item memory newItem;
         newItem.title = title;
-        newItem.priceInEth = priceInEth * 1 ether;
+        newItem.priceInWei = priceInEth * 1 ether;
         newItem.sellerAddress = msg.sender;
         newItem.isSold = false;
         itemsForSale.push(newItem);
@@ -45,11 +45,11 @@ contract Buyco {
         length = itemsForSale.length;
     }
 
-    function getItem(uint itemId) public view returns(string title, uint priceInEth, bool isSold) {
+    function getItem(uint itemId) public view returns(string title, uint priceInWei, bool isSold) {
         require(0 <= itemId && itemId < itemsForSale.length);
         Item memory foundItem = itemsForSale[itemId];
         title = foundItem.title;
-        priceInEth = foundItem.priceInEth;
+        priceInWei = foundItem.priceInWei;
         isSold = foundItem.isSold;
     }
 
@@ -61,7 +61,7 @@ contract Buyco {
         // item musn't be sold
         require(!itemsForSale[itemId].isSold);
         // buyer must pay the exact value of the item
-        require(itemsForSale[itemId].priceInEth == msg.value);
+        require(itemsForSale[itemId].priceInWei == msg.value);
 
         itemsForSale[itemId].isSold = true;
         transferFundsToSeller(itemId);
@@ -69,7 +69,7 @@ contract Buyco {
 
     // deduct 5% from item price and transfer funds to seller
     function transferFundsToSeller(uint soldItemId) private {
-        uint totalAmount = itemsForSale[soldItemId].priceInEth;
+        uint totalAmount = itemsForSale[soldItemId].priceInWei;
         uint fivePercentOfTotalAmount = totalAmount * 5 / 100;
         uint deductedAmount = totalAmount - fivePercentOfTotalAmount;
         address sellerAddress = itemsForSale[soldItemId].sellerAddress;
