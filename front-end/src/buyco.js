@@ -2,7 +2,7 @@ $(document).ready(async function () {
     let providers = ethers.providers;
     let provider = new providers.JsonRpcProvider('http://localhost:8545');
     const oneEth = 1000000000000000000;
-    const contractAddress = '0x9eeb48e97e2ab18436918f9da9c36b845c79f59a';
+    const contractAddress = '0x60731766e04a04e0338cb648a6a1f9ab13fc9a2f';
     const contractAbi = [
         {
             "constant": false,
@@ -188,11 +188,22 @@ $(document).ready(async function () {
         let contract = getContractForReading();
         let itemsLength = await contract.getItemsLength();
         let items = [];
+        let item;
         for (let i = 0; i < itemsLength; i++) {
-            items.push(await contract.getItem(i));
+            item = await contract.getItem(i);
+            item.id = i;
+            if (!item.isSold) {
+                items.push(item);
+            }
         }
 
         return items;
+    }
+
+    async function buyItem(itemId, walletPassword) {
+        let contract = await getContractForWriting(walletPassword);
+        let result = await contract.buyItem(itemId);
+        console.log('Item bought ' + result);
     }
 
     $('#new-wallet').click(() => {
@@ -230,9 +241,19 @@ $(document).ready(async function () {
     function addItemsForSaleToDom(itemsForSale) {
         $.each(itemsForSale, (index, item) => {
             let itemPriceInEth = item.priceInWei / oneEth;
-            $('#items').append('<p><b>Item #' + index + '</b> Title: ' + item.title + ' -> price: ' + itemPriceInEth + ' eth.</p>');
+            $('#items').append(`<b>Item #${item.id} </b> Title: ${item.title} -> price: ${itemPriceInEth} eth. `);
+            $('#items').append(`<input type="button" id="buy-item-${item.id}" class="buy-button" value="Buy" />`);
+            $('#items').append(`<br>`);
         });
     }
 
     addItemsForSaleToDom(await getItemsForSale());
+
+    $('#items').on('click', 'input.buy-button', function () {
+        let buttonId = $(this).attr('id');
+        let itemId = buttonId.substring(9);
+        let walletPassword = $('#buy-item-unlock-password').val();
+        buyItem(itemId, walletPassword);
+        $('#buy-item-unlock-password').val('');
+    });
 });

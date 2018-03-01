@@ -8,7 +8,6 @@ contract Buyco {
     }
 
     struct Item {
-        uint id;
         string title;
         string description;
         uint priceInWei;
