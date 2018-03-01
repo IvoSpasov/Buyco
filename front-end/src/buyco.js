@@ -1,7 +1,7 @@
 $(document).ready(async function () {
     let providers = ethers.providers;
     let provider = new providers.JsonRpcProvider('http://localhost:8545');
-    const contractAddress = '0x014b09c545ab29b6a3fb41663fcf6887321dac31';
+    const contractAddress = '0xfb99fba92a471dfaf27321a579dc38bfa3ada0a7';
     const contractAbi = [
         {
             "constant": false,
@@ -57,37 +57,38 @@ $(document).ready(async function () {
         {
             "constant": true,
             "inputs": [],
-            "name": "getItems",
+            "name": "getItemsLength",
             "outputs": [
                 {
-                    "components": [
-                        {
-                            "name": "id",
-                            "type": "uint256"
-                        },
-                        {
-                            "name": "title",
-                            "type": "string"
-                        },
-                        {
-                            "name": "description",
-                            "type": "string"
-                        },
-                        {
-                            "name": "priceInEth",
-                            "type": "uint256"
-                        },
-                        {
-                            "name": "sellerAddress",
-                            "type": "address"
-                        },
-                        {
-                            "name": "isSold",
-                            "type": "bool"
-                        }
-                    ],
-                    "name": "",
-                    "type": "tuple[]"
+                    "name": "length",
+                    "type": "uint256"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "constant": true,
+            "inputs": [
+                {
+                    "name": "itemId",
+                    "type": "uint256"
+                }
+            ],
+            "name": "getItem",
+            "outputs": [
+                {
+                    "name": "title",
+                    "type": "string"
+                },
+                {
+                    "name": "priceInEth",
+                    "type": "uint256"
+                },
+                {
+                    "name": "isSold",
+                    "type": "bool"
                 }
             ],
             "payable": false,
