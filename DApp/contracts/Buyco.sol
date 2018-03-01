@@ -41,8 +41,16 @@ contract Buyco {
         itemsForSale.push(newItem);
     }
 
-    function getItems() public view returns(Item[]) {
-        return itemsForSale;
+    function getItemsLength() public view returns(uint length) {
+        length = itemsForSale.length;
+    }
+
+    function getItem(uint itemId) public view returns(string title, uint priceInEth, bool isSold) {
+        require(0 <= itemId && itemId < itemsForSale.length);
+        Item memory foundItem = itemsForSale[itemId];
+        title = foundItem.title;
+        priceInEth = foundItem.priceInEth;
+        isSold = foundItem.isSold;
     }
 
     function buyItem(uint itemId) public payable {
