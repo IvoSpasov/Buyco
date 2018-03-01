@@ -175,6 +175,13 @@ $(document).ready(async function () {
         // TODO: add message on screen for success
     }
 
+    async function addNewItem(title, priceInEth, walletPassword) {
+        let contract = await getContractForWriting(walletPassword);
+        let result = await contract.addItem(title, priceInEth);
+        console.log('Added a new item for sale: ' + result);
+        // TODO: add message on screen for success
+    }
+
     $('#new-wallet').click(() => {
         let password = $('#new-wallet-password').val();
         processNewWallet(password);
@@ -195,5 +202,15 @@ $(document).ready(async function () {
         registerUser(nameOfUser, walletPassword);
         $('#name').val('');
         $('#register-unlock-password').val('');
+    });
+
+    $('#add-item').click(() => {
+        let itemTitle = $('#item-title').val();
+        let itemPrice = $('#item-price').val();
+        let walletPassword = $('#add-item-unlock-password').val();
+        addNewItem(itemTitle, itemPrice, walletPassword);
+        $('#item-title').val('');
+        $('#item-price').val('');
+        $('#add-item-unlock-password').val('');
     });
 });
