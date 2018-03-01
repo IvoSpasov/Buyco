@@ -9,10 +9,6 @@ $(document).ready(async function () {
                 {
                     "name": "name",
                     "type": "string"
-                },
-                {
-                    "name": "addr",
-                    "type": "address"
                 }
             ],
             "name": "addUser",
@@ -48,8 +44,8 @@ $(document).ready(async function () {
                     "type": "string"
                 },
                 {
-                    "name": "sellerAddress",
-                    "type": "address"
+                    "name": "priceInEth",
+                    "type": "uint256"
                 }
             ],
             "name": "addItem",
@@ -59,35 +55,57 @@ $(document).ready(async function () {
             "type": "function"
         },
         {
-            "constant": false,
-            "inputs": [
+            "constant": true,
+            "inputs": [],
+            "name": "getItems",
+            "outputs": [
                 {
-                    "name": "id",
-                    "type": "uint256"
-                },
-                {
-                    "name": "buyer",
-                    "type": "address"
+                    "components": [
+                        {
+                            "name": "id",
+                            "type": "uint256"
+                        },
+                        {
+                            "name": "title",
+                            "type": "string"
+                        },
+                        {
+                            "name": "description",
+                            "type": "string"
+                        },
+                        {
+                            "name": "priceInEth",
+                            "type": "uint256"
+                        },
+                        {
+                            "name": "sellerAddress",
+                            "type": "address"
+                        },
+                        {
+                            "name": "isSold",
+                            "type": "bool"
+                        }
+                    ],
+                    "name": "",
+                    "type": "tuple[]"
                 }
             ],
-            "name": "buyItem",
-            "outputs": [],
-            "payable": true,
-            "stateMutability": "payable",
+            "payable": false,
+            "stateMutability": "view",
             "type": "function"
         },
         {
             "constant": false,
             "inputs": [
                 {
-                    "name": "soldItemId",
+                    "name": "itemId",
                     "type": "uint256"
                 }
             ],
-            "name": "transferFundsToSeller",
+            "name": "buyItem",
             "outputs": [],
-            "payable": false,
-            "stateMutability": "nonpayable",
+            "payable": true,
+            "stateMutability": "payable",
             "type": "function"
         }
     ];

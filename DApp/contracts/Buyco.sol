@@ -25,7 +25,6 @@ contract Buyco {
         users[msg.sender] = newUser;
     }
 
-    // TODO: Do I need an address parameter?
     function getUser(address addr) public view returns(string) {
         User memory foundUser = users[addr];
         return foundUser.name;
@@ -56,7 +55,7 @@ contract Buyco {
         // buyer must pay the exact value of the item
         require(itemsForSale[itemId].priceInEth == msg.value);
 
-        itemsForSale[itemId].isSold = true; // if ture -> hide from ui
+        itemsForSale[itemId].isSold = true;
         transferFundsToSeller(itemId);
     }
 
@@ -64,8 +63,8 @@ contract Buyco {
     function transferFundsToSeller(uint soldItemId) private {
         uint totalAmount = itemsForSale[soldItemId].priceInEth;
         uint fivePercentOfTotalAmount = totalAmount * 5 / 100;
-        uint deductedAmount = totalAmount - fivePercentOfTotalAmount; 
+        uint deductedAmount = totalAmount - fivePercentOfTotalAmount;
         address sellerAddress = itemsForSale[soldItemId].sellerAddress;
-        sellerAddress.transfer(deductedAmount);        
+        sellerAddress.transfer(deductedAmount);
     }
 }
