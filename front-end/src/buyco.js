@@ -2,7 +2,7 @@ $(document).ready(async function () {
     let providers = ethers.providers;
     let provider = new providers.JsonRpcProvider('http://localhost:8545');
     const oneEth = 1000000000000000000;
-    const contractAddress = '0x60731766e04a04e0338cb648a6a1f9ab13fc9a2f';
+    const contractAddress = '0x732b1c4da6a26301bc98f1e2f236e20e33e3015f';
     const contractAbi = [
         {
             "constant": false,
@@ -192,9 +192,9 @@ $(document).ready(async function () {
         for (let i = 0; i < itemsLength; i++) {
             item = await contract.getItem(i);
             item.id = i;
-            if (!item.isSold) {
+            //if (!item.isSold) {
                 items.push(item);
-            }
+            //}
         }
 
         return items;
@@ -202,7 +202,9 @@ $(document).ready(async function () {
 
     async function buyItem(itemId, walletPassword) {
         let contract = await getContractForWriting(walletPassword);
-        let result = await contract.buyItem(itemId);
+        let item = await contract.getItem(itemId);
+        let options = { value: item.priceInWei };
+        let result = await contract.buyItem(itemId, options);
         console.log('Item bought ' + result);
     }
 
@@ -241,7 +243,7 @@ $(document).ready(async function () {
     function addItemsForSaleToDom(itemsForSale) {
         $.each(itemsForSale, (index, item) => {
             let itemPriceInEth = item.priceInWei / oneEth;
-            $('#items').append(`<b>Item #${item.id} </b> Title: ${item.title} -> price: ${itemPriceInEth} eth. `);
+            $('#items').append(`<b>Item #${item.id} </b> Title: ${item.title} -> price: ${itemPriceInEth} eth. is sold: ${item.isSold} `);
             $('#items').append(`<input type="button" id="buy-item-${item.id}" class="buy-button" value="Buy" />`);
             $('#items').append(`<br>`);
         });
