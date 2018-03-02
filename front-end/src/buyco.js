@@ -230,17 +230,20 @@ $(document).ready(async function () {
         $('#register-unlock-password').val('');
     });
 
-    $('#add-item').click(() => {
+    $('#add-item').click(async () => {
         let itemTitle = $('#item-title').val();
         let itemPrice = $('#item-price').val();
         let walletPassword = $('#add-item-unlock-password').val();
-        addNewItem(itemTitle, itemPrice, walletPassword);
+        await addNewItem(itemTitle, itemPrice, walletPassword);
         $('#item-title').val('');
         $('#item-price').val('');
         $('#add-item-unlock-password').val('');
+        addItemsForSaleToDom();
     });
 
-    function addItemsForSaleToDom(itemsForSale) {
+    async function addItemsForSaleToDom() {
+        $('#items').empty();
+        let itemsForSale = await getItemsForSale();
         $.each(itemsForSale, (index, item) => {
             let itemPriceInEth = item.priceInWei / oneEth;
             $('#items').append(`<b>Item #${item.id} </b> Title: ${item.title} -> price: ${itemPriceInEth} eth. is sold: ${item.isSold} `);
@@ -249,13 +252,14 @@ $(document).ready(async function () {
         });
     }
 
-    addItemsForSaleToDom(await getItemsForSale());
+    addItemsForSaleToDom();
 
-    $('#items').on('click', 'input.buy-button', function () {
+    $('#items').on('click', 'input.buy-button', async function () {
         let buttonId = $(this).attr('id');
         let itemId = buttonId.substring(9);
         let walletPassword = $('#buy-item-unlock-password').val();
-        buyItem(itemId, walletPassword);
+        await buyItem(itemId, walletPassword);
         $('#buy-item-unlock-password').val('');
+        addItemsForSaleToDom();
     });
 });
