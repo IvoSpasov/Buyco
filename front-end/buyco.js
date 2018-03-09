@@ -1,12 +1,13 @@
 $(document).ready(async function () {
-    alertify.set('notifier','position', 'top-right');
-    
+    alertify.set('notifier', 'position', 'top-right');
+    const alertWaitInSec = 5;
+
     let providers = ethers.providers;
     let network = providers.networks.ropsten;
-    //let provider = new providers.JsonRpcProvider('http://localhost:8545');
-    let provider = new providers.EtherscanProvider(network)
+    let provider = new providers.JsonRpcProvider('http://localhost:8545');
+    //let provider = new providers.EtherscanProvider(network)
     const oneEth = 1000000000000000000;
-    const contractAddress = '0x62c4162B096C37DdA211532eFe799D8Ffdc591a2';
+    const contractAddress = '0x8d0423cf0adf1d68bfdd879b0e72f74f0639e574';
     const contractAbi = [
         {
             "inputs": [],
@@ -178,8 +179,9 @@ $(document).ready(async function () {
         let wallet = createRandomWallet();
         let walletJson = await encryptWallet(wallet, walletPassword);
         saveWalletToStorage(walletJson);
-        // TODO: add message on screen for success
+        alertify.notify('New wallet successfully created and encrypted.', 'success', alertWaitInSec);
         // TODO: save to disk
+        return wallet;
     }
 
     async function processWalletImport(privateKey, walletPassword) {
@@ -231,7 +233,7 @@ $(document).ready(async function () {
             item = await contract.getItem(i);
             item.id = i;
             //if (!item.isSold) {
-                items.push(item);
+            items.push(item);
             //}
         }
 
@@ -246,10 +248,11 @@ $(document).ready(async function () {
         console.log('Item bought ' + result);
     }
 
-    $('#new-wallet').click(() => {
+    $('#new-wallet').click(async () => {
         let password = $('#new-wallet-password').val();
-        processNewWallet(password);
+        let wallet = await processNewWallet(password);
         $('#new-wallet-password').val('');
+        $('#wallet-info').val(JSON.stringify(wallet, null, '\t'));
     });
 
     $('#import-wallet').click(() => {

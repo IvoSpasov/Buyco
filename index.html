@@ -6,8 +6,8 @@
     <title>Buyco - a decentralized marketplace</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.5/slate/bootstrap.min.css"/>
-    <link rel="stylesheet" href="front-end/css/alertify.min.css" >
-    <link rel="stylesheet" href="front-end/css/themes/bootstrap.min.css" >
+    <link rel="stylesheet" href="front-end/css/alertify/alertify.min.css" >
+    <link rel="stylesheet" href="front-end/css/alertify/themes/bootstrap.min.css" >
 </head>
 <body class="container">
     <div>
@@ -18,7 +18,7 @@
             We can create a new wallet for you. It'll be password encrypted so please provide a password.
             Don't forget to put some eth in the wallet before registering.
         </p>
-        </div>        
+        </div>
         <div class="form-group row">
             <label for="new-wallet-password" class="col-sm-3 col-form-label">Wallet password</label>
             <div class="col-sm-9">
@@ -30,6 +30,13 @@
                 <input type="button" id="new-wallet" value="Create a new wallet" class="btn btn-primary float-right" />
             </div>
         </div>
+        <p>Please save your wallet information for later recovery.</p>
+        <div class="form-group row">
+                <label for="wallet-info" class="col-sm-3 col-form-label">Wallet info</label>
+                <div class="col-sm-9">
+                    <textarea id="wallet-info" rows="7" cols="50" class="form-control"></textarea>
+                </div>
+            </div>
         <hr>
     </div>
     <div>
