@@ -8,72 +8,111 @@
 </head>
 <body class="container-fluid">
     <div>
-        <h1>Create new wallet</h1>
-        <p>If you want to buy or sell someting you need to register.</p>
-        <p>If you want to register you'll need a wallet, so that you can pay a small registration fee.</p>
-        <p>We can create a new wallet for you. It'll be password encrypted so please provide a password.</p>
-
+        <h2>Create new wallet</h2>
+        <p>
+            If you want to buy or sell someting you need to register. 
+            If you want to register you'll need a wallet, so that you can pay a small registration fee. 
+            We can create a new wallet for you. It'll be password encrypted so please provide a password.
+            Don't forget to put some eth in the wallet before registering.
+        </p>
+        </div>        
         <div class="form-group row">
-            <label for="new-wallet-password" class="col-sm-2 col-form-label">Wallet password</label>
-            <div class="col-sm-10">
+            <label for="new-wallet-password" class="col-sm-3 col-form-label">Wallet password</label>
+            <div class="col-sm-9">
                 <input type="password" id="new-wallet-password" class="form-control" />
             </div>
         </div>
         <div class="form-group row">
-            <div class="col-sm-10">
-                <input type="button" id="new-wallet" value="Create a new wallet" class="btn btn-primary" />
+            <div class="col-sm-12">
+                <input type="button" id="new-wallet" value="Create a new wallet" class="btn btn-primary float-right" />
             </div>
         </div>
-        
-        <p>Don't forget to put some eth in the wallet before registering.</p>
         <hr>
     </div>
     <div>
-        <h1>Import wallet</h1>
-        <p>Or you can import your own wallet. Your private key will be stored only in the current browser and won't be sent
-            anywhere else.
+        <h2>Import wallet</h2>
+        <p>
+            You can also import your own wallet. Your private key will be stored only in the current browser and won't 
+            be sent anywhere else. Please provide a password so that your wallet is safely saved in the browser.
         </p>
-        <p>Please also provide a password so that you wallet is encryptedly saved in the browser.</p>
-        <label>Private key</label>
-        <input type="text" id="private-key" />
-        <br>
-        <label>Wallet password</label>
-        <input type="password" id='imported-wallet-password' />
-        <br>
-        <input type="button" id="import-wallet" value="Import my wallet" />
+        <div class="form-group row">
+            <label for="private-key" class="col-sm-3 col-form-label">Private key</label>
+            <div class="col-sm-9">
+                <input type="text" id="private-key" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="imported-wallet-password" class="col-sm-3 col-form-label">Wallet password</label>
+            <div class="col-sm-9">
+                <input type="password" id='imported-wallet-password' class="form-control" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-12"> 
+                <input type="button" id="import-wallet" value="Import my wallet" class="btn btn-primary float-right" />
+            </div>
+        </div>
         <hr>
     </div>
     <div>
-        <h1>Register</h1>
+        <h2>Register</h2>
         <p>After adding a wallet you can finally register.</p>
-        <label>Name</label>
-        <input type="text" id="name" />
-        <br>
-        <label>Unlock wallet with password</label>
-        <input type="password" id="register-unlock-password" />
-        <br>
-        <input type="button" id="register" value="Register" />
+        <div class="form-group row">
+            <label for="name" class="col-sm-3 col-form-label">Name</label>
+            <div class="col-sm-9">
+                <input type="text" id="name" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="register-unlock-password" class="col-sm-3 col-form-label">Wallet unlock password</label>
+            <div class="col-sm-9">
+                <input type="password" id="register-unlock-password" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-12"> 
+                <input type="button" id="register" value="Register" class="btn btn-primary float-right" />            
+            </div>
+        </div>
         <hr>
     </div>
     <div>
-        <h1>Add new item for sale</h1>
+        <h2>Add new item for sale</h2>
         <p>Once you're registered you can start adding items for sale.</p>
-        <label>Item title</label>
-        <input type="text" id="item-title" />
-        <br>
-        <label>Item price in ethers</label>
-        <input type="number" id="item-price" />
-        <br>
-        <label>Wallet password</label>
-        <input type="password" id="add-item-unlock-password" />
-        <br>
-        <input type="button" id="add-item" value="Add item for sale" />
+        <div class="form-group row">
+            <label for="item-title" class="col-sm-3 col-form-label">Item title</label>
+            <div class="col-sm-9">
+                <input type="text" id="item-title" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="item-price" class="col-sm-3 col-form-label">Item price in ethers</label>
+            <div class="col-sm-9">
+                <input type="number" id="item-price" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="add-item-unlock-password" class="col-sm-3 col-form-label">Wallet unlock password</label>
+            <div class="col-sm-9">
+                <input type="password" id="add-item-unlock-password" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-12"> 
+                <input type="button" id="add-item" value="Add item for sale" class="btn btn-primary float-right" /> 
+            </div>
+        </div>
         <hr>
     </div>
     <div>
-        <h1>Items for sale</h1>
-        <label>Wallet password</label>
-        <input type="password" id="buy-item-unlock-password" />
+        <h2>Items for sale</h2>
+        <p>Please don't forget to unlock your wallet before buying an item.</p>
+        <div class="form-group row">
+            <label for="buy-item-unlock-password" class="col-sm-3 col-form-label">Wallet unlock password</label>
+            <div class="col-sm-9">
+                <input type="password" id="buy-item-unlock-password" class="form-control" />
+            </div>
+        </div>
         <div id="items"></div>
     </div>
     <script src="front-end/lib/ethers-v2.js"></script>
