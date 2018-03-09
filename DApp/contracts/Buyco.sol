@@ -17,6 +17,16 @@ contract Buyco {
 
     mapping(address => User) private users;
     Item[] private itemsForSale;
+    address private contractOwner;
+    
+    function Buyco() public {
+        contractOwner = msg.sender;
+    }
+    
+    modifier isOwner() {
+        require(msg.sender == contractOwner);
+        _;
+    }
 
     function addUser(string name) public {
         User memory newUser;
@@ -57,7 +67,7 @@ contract Buyco {
         require(bytes(users[msg.sender].name).length != 0);
         // item id must be valid
         require(0 <= itemId && itemId < itemsForSale.length);
-        // item musn't be sold
+        // item must not be sold
         require(!itemsForSale[itemId].isSold);
         // buyer must pay the exact value of the item
         require(itemsForSale[itemId].priceInWei == msg.value);
@@ -73,5 +83,10 @@ contract Buyco {
         uint deductedAmount = totalAmount - fivePercentOfTotalAmount;
         address sellerAddress = itemsForSale[soldItemId].sellerAddress;
         sellerAddress.transfer(deductedAmount);
+    }
+    
+    function getFundsFromContract(uint amountInEth) public isOwner {
+        uint amountInWei = amountInEth * 1 ether;
+        msg.sender.transfer(amountInWei);
     }
 }
