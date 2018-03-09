@@ -1,4 +1,6 @@
 $(document).ready(async function () {
+    alertify.set('notifier','position', 'top-right');
+    
     let providers = ethers.providers;
     let network = providers.networks.ropsten;
     //let provider = new providers.JsonRpcProvider('http://localhost:8545');
