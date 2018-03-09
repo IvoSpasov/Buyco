@@ -278,13 +278,19 @@ $(document).ready(async function () {
     });
 
     async function addItemsForSaleToDom() {
-        $('#items').empty();
+        $('#table-body').empty();
         let itemsForSale = await getItemsForSale();
         $.each(itemsForSale, (index, item) => {
             let itemPriceInEth = item.priceInWei / oneEth;
-            $('#items').append(`<b>Item #${item.id} </b> Title: ${item.title} -> price: ${itemPriceInEth} eth. is sold: ${item.isSold} `);
-            $('#items').append(`<input type="button" id="buy-item-${item.id}" class="buy-button" value="Buy" />`);
-            $('#items').append(`<br>`);
+            $('#table-body').append(`
+                <tr>
+                    <th scope="row">${item.id + 1}</th>
+                    <td>${item.title}</td>
+                    <td>${itemPriceInEth} eth.</td>
+                    <td>${item.isSold}</td>
+                    <td><input type="button" id="buy-item-${item.id}" class="buy-button btn btn-success btn-sm" value="Buy" /></td>
+                </tr>
+            `);
         });
     }
 

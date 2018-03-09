@@ -113,7 +113,18 @@
                 <input type="password" id="buy-item-unlock-password" class="form-control" />
             </div>
         </div>
-        <div id="items"></div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Is sold?</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+        </table>
     </div>
     <script src="front-end/lib/ethers-v2.js"></script>
     <script src="front-end/lib/jquery-3.3.1.min.js"></script>
