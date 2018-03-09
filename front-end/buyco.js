@@ -2,8 +2,14 @@ $(document).ready(async function () {
     let providers = ethers.providers;
     let provider = new providers.JsonRpcProvider('http://localhost:8545');
     const oneEth = 1000000000000000000;
-    const contractAddress = '0x732b1c4da6a26301bc98f1e2f236e20e33e3015f';
+    const contractAddress = '0x26fac5711798708a032ebebc60859d43b9bb43a6';
     const contractAbi = [
+        {
+            "inputs": [],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "constructor"
+        },
         {
             "constant": false,
             "inputs": [
@@ -108,6 +114,34 @@ $(document).ready(async function () {
             "outputs": [],
             "payable": true,
             "stateMutability": "payable",
+            "type": "function"
+        },
+        {
+            "constant": true,
+            "inputs": [],
+            "name": "getContractBalance",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "constant": false,
+            "inputs": [
+                {
+                    "name": "amountInEth",
+                    "type": "uint256"
+                }
+            ],
+            "name": "getFundsFromContract",
+            "outputs": [],
+            "payable": false,
+            "stateMutability": "nonpayable",
             "type": "function"
         }
     ];
