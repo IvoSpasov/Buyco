@@ -85,6 +85,11 @@ contract Buyco {
         sellerAddress.transfer(deductedAmount);
     }
     
+    function getContractBalance() public view isOwner returns(uint) {
+        uint balanceInEth = this.balance / 1 ether;
+        return balanceInEth;
+    }
+    
     function getFundsFromContract(uint amountInEth) public isOwner {
         uint amountInWei = amountInEth * 1 ether;
         msg.sender.transfer(amountInWei);
