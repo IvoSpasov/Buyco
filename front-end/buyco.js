@@ -228,9 +228,9 @@ $(document).ready(async function () {
 
     async function addNewItem(title, priceInEth, walletPassword) {
         let contract = await getContractForWriting(walletPassword);
-        let result = await contract.addItem(title, priceInEth);
-        console.log('Added a new item for sale: ' + result);
-        // TODO: add message on screen for success
+        let transaction = await contract.addItem(title, priceInEth);
+        console.log('Transaction for adding new item: ' + JSON.stringify(transaction));
+        success('Transaction sucessfully sent.');
     }
 
     async function getItemsForSale() {
@@ -253,8 +253,9 @@ $(document).ready(async function () {
         let contract = await getContractForWriting(walletPassword);
         let item = await contract.getItem(itemId);
         let options = { value: item.priceInWei };
-        let result = await contract.buyItem(itemId, options);
-        console.log('Item bought ' + result);
+        let transaction = await contract.buyItem(itemId, options);
+        console.log('Transaction for buying an item: ' + JSON.stringify(transaction));
+        success('Transaction sucessfully sent.');
     }
 
     function success(message) {
@@ -323,7 +324,7 @@ $(document).ready(async function () {
 
     addItemsForSaleToDom();
 
-    $('#items').on('click', 'input.buy-button', async function () {
+    $('.table').on('click', 'input.buy-button', async function () {
         let buttonId = $(this).attr('id');
         let itemId = buttonId.substring(9);
         let walletPassword = $('#buy-item-unlock-password').val();
