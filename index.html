@@ -1,24 +1,30 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Buyco - a decentralized marketplace</title>
-    <script src="front-end/lib/ethers-v2.js"></script>
-    <script src="front-end/lib/jquery-3.3.1.min.js"></script>
-    <script src="front-end/buyco.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
-
-<body>
+<body class="container-fluid">
     <div>
         <h1>Create new wallet</h1>
         <p>If you want to buy or sell someting you need to register.</p>
         <p>If you want to register you'll need a wallet, so that you can pay a small registration fee.</p>
         <p>We can create a new wallet for you. It'll be password encrypted so please provide a password.</p>
-        <label>Wallet password</label>
-        <input type="password" id='new-wallet-password' />
-        <br>
-        <input type="button" id="new-wallet" value="Create a new wallet" />
+
+        <div class="form-group row">
+            <label for="new-wallet-password" class="col-sm-2 col-form-label">Wallet password</label>
+            <div class="col-sm-10">
+                <input type="password" id="new-wallet-password" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-10">
+                <input type="button" id="new-wallet" value="Create a new wallet" class="btn btn-primary" />
+            </div>
+        </div>
+        
         <p>Don't forget to put some eth in the wallet before registering.</p>
         <hr>
     </div>
@@ -70,6 +76,8 @@
         <input type="password" id="buy-item-unlock-password" />
         <div id="items"></div>
     </div>
+    <script src="front-end/lib/ethers-v2.js"></script>
+    <script src="front-end/lib/jquery-3.3.1.min.js"></script>
+    <script src="front-end/buyco.js"></script>
 </body>
-
 </html>
