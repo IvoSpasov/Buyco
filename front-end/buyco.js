@@ -1,10 +1,13 @@
 $(document).ready(async function () {
+    alertify.set('notifier', 'position', 'top-right');
+    const alertWaitInSec = 5;
+
     let providers = ethers.providers;
     let network = providers.networks.ropsten;
-    //let provider = new providers.JsonRpcProvider('http://localhost:8545');
-    let provider = new providers.EtherscanProvider(network)
+    let provider = new providers.JsonRpcProvider('http://localhost:8545');
+    //let provider = new providers.EtherscanProvider(network)
     const oneEth = 1000000000000000000;
-    const contractAddress = '0x62c4162B096C37DdA211532eFe799D8Ffdc591a2';
+    const contractAddress = '0xc84bfcbbf503a6bd65c44d15ac059019c7dbe046';
     const contractAbi = [
         {
             "inputs": [],
@@ -176,15 +179,17 @@ $(document).ready(async function () {
         let wallet = createRandomWallet();
         let walletJson = await encryptWallet(wallet, walletPassword);
         saveWalletToStorage(walletJson);
-        // TODO: add message on screen for success
+        success('New wallet successfully created and encrypted.');
         // TODO: save to disk
+        return wallet;
     }
 
     async function processWalletImport(privateKey, walletPassword) {
         let wallet = createWallet(privateKey);
         let walletJson = await encryptWallet(wallet, walletPassword);
         saveWalletToStorage(walletJson);
-        // TODO: add message on screen for success
+        success('Wallet successfully imported.');
+        getCurrentUserFromContract();
     }
 
     async function getContractForWriting(walletPassword) {
@@ -199,25 +204,35 @@ $(document).ready(async function () {
         return new ethers.Contract(contractAddress, contractAbi, provider);
     }
 
-    async function getUserFromContract(address) {
-        let contract = getContractForReading();
-        let result = await contract.getUser(address);
-        console.log(result);
-        console.log(result[0]);
-    }
-
     async function registerUser(name, walletPassword) {
         let contract = await getContractForWriting(walletPassword);
-        let result = await contract.addUser(name); // shoud I await here?
-        console.log('Added user: ' + result);
-        // TODO: add message on screen for success
+        let transaction = await contract.addUser(name);
+        console.log('Transaction for adding user:');
+        console.log(transaction);
+        success('Transaction sucessfully sent.');
     }
+
+    async function getCurrentUserFromContract() {
+        if (!localStorage.wallet) {
+            return;
+        }
+        let address = JSON.parse(localStorage.wallet).address;
+        let contract = getContractForReading();
+        let userNameArr = await contract.getUser(address);
+        let userName = userNameArr[0];
+        if (userName) {
+            success('Hello ' + userName);
+        }
+    }
+
+    getCurrentUserFromContract();
 
     async function addNewItem(title, priceInEth, walletPassword) {
         let contract = await getContractForWriting(walletPassword);
-        let result = await contract.addItem(title, priceInEth);
-        console.log('Added a new item for sale: ' + result);
-        // TODO: add message on screen for success
+        let transaction = await contract.addItem(title, priceInEth);
+        console.log('Transaction for adding new item:');
+        console.log(transaction);
+        success('Transaction sucessfully sent.');
     }
 
     async function getItemsForSale() {
@@ -228,9 +243,7 @@ $(document).ready(async function () {
         for (let i = 0; i < itemsLength; i++) {
             item = await contract.getItem(i);
             item.id = i;
-            //if (!item.isSold) {
-                items.push(item);
-            //}
+            items.push(item);
         }
 
         return items;
@@ -240,14 +253,30 @@ $(document).ready(async function () {
         let contract = await getContractForWriting(walletPassword);
         let item = await contract.getItem(itemId);
         let options = { value: item.priceInWei };
-        let result = await contract.buyItem(itemId, options);
-        console.log('Item bought ' + result);
+        let transaction = await contract.buyItem(itemId, options);
+        console.log('Transaction for buying an item:');
+        console.log(transaction);
+        success('Transaction sucessfully sent.');
     }
 
-    $('#new-wallet').click(() => {
+    function success(message) {
+        alertify.notify(message, 'success', alertWaitInSec);
+    }
+
+    function error(message) {
+        alertify.notify(message, 'error', alertWaitInSec);
+    }
+
+    $('#new-wallet').click(async () => {
         let password = $('#new-wallet-password').val();
-        processNewWallet(password);
+        if (!password) {
+            error('Please provide a password.');
+            return;
+        }
+
+        let wallet = await processNewWallet(password);
         $('#new-wallet-password').val('');
+        $('#wallet-info').val(JSON.stringify(wallet, null, '\t'));
     });
 
     $('#import-wallet').click(() => {
@@ -296,10 +325,14 @@ $(document).ready(async function () {
 
     addItemsForSaleToDom();
 
-    $('#items').on('click', 'input.buy-button', async function () {
+    $('.table').on('click', 'input.buy-button', async function () {
         let buttonId = $(this).attr('id');
         let itemId = buttonId.substring(9);
         let walletPassword = $('#buy-item-unlock-password').val();
+        if (!walletPassword) {
+            error('Please provide a password.');
+            return;
+        }
         await buyItem(itemId, walletPassword);
         $('#buy-item-unlock-password').val('');
         addItemsForSaleToDom();
