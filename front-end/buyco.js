@@ -259,6 +259,13 @@ $(document).ready(async function () {
         success('Transaction sucessfully sent.');
     }
 
+    async function getContractBalance() {
+        let contract = getContractForReading();
+        let balance = await contract.getContractBalance();
+        success('Transaction sucessfully sent.');
+        return balance;
+    }
+
     function success(message) {
         alertify.notify(message, 'success', alertWaitInSec);
     }
@@ -336,5 +343,10 @@ $(document).ready(async function () {
         await buyItem(itemId, walletPassword);
         $('#buy-item-unlock-password').val('');
         addItemsForSaleToDom();
+    });
+
+    $('#check-balance').click(async () => {
+        let balance = await getContractBalance();
+        $('#balance').val(balance);
     });
 });
