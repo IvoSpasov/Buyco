@@ -4,10 +4,10 @@ $(document).ready(async function () {
 
     let providers = ethers.providers;
     let network = providers.networks.ropsten;
-    let provider = new providers.JsonRpcProvider('http://localhost:8545');
-    //let provider = new providers.EtherscanProvider(network)
+    //let provider = new providers.JsonRpcProvider('http://localhost:8545');
+    let provider = new providers.EtherscanProvider(network)
     const oneEth = 1000000000000000000;
-    const contractAddress = '0xc84bfcbbf503a6bd65c44d15ac059019c7dbe046';
+    const contractAddress = '0x62c4162b096c37dda211532efe799d8ffdc591a2';
     const contractAbi = [
         {
             "inputs": [],
