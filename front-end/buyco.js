@@ -7,7 +7,7 @@ $(document).ready(async function () {
     let provider = new providers.JsonRpcProvider('http://localhost:8545');
     //let provider = new providers.EtherscanProvider(network)
     const oneEth = 1000000000000000000;
-    const contractAddress = '0x8d0423cf0adf1d68bfdd879b0e72f74f0639e574';
+    const contractAddress = '0xc84bfcbbf503a6bd65c44d15ac059019c7dbe046';
     const contractAbi = [
         {
             "inputs": [],
@@ -207,7 +207,8 @@ $(document).ready(async function () {
     async function registerUser(name, walletPassword) {
         let contract = await getContractForWriting(walletPassword);
         let transaction = await contract.addUser(name);
-        console.log('Transaction for adding user: ' + JSON.stringify(transaction));
+        console.log('Transaction for adding user:');
+        console.log(transaction);
         success('Transaction sucessfully sent.');
     }
 
@@ -229,7 +230,8 @@ $(document).ready(async function () {
     async function addNewItem(title, priceInEth, walletPassword) {
         let contract = await getContractForWriting(walletPassword);
         let transaction = await contract.addItem(title, priceInEth);
-        console.log('Transaction for adding new item: ' + JSON.stringify(transaction));
+        console.log('Transaction for adding new item:');
+        console.log(transaction);
         success('Transaction sucessfully sent.');
     }
 
@@ -241,9 +243,7 @@ $(document).ready(async function () {
         for (let i = 0; i < itemsLength; i++) {
             item = await contract.getItem(i);
             item.id = i;
-            //if (!item.isSold) {
             items.push(item);
-            //}
         }
 
         return items;
@@ -254,7 +254,8 @@ $(document).ready(async function () {
         let item = await contract.getItem(itemId);
         let options = { value: item.priceInWei };
         let transaction = await contract.buyItem(itemId, options);
-        console.log('Transaction for buying an item: ' + JSON.stringify(transaction));
+        console.log('Transaction for buying an item:');
+        console.log(transaction);
         success('Transaction sucessfully sent.');
     }
 
@@ -328,6 +329,10 @@ $(document).ready(async function () {
         let buttonId = $(this).attr('id');
         let itemId = buttonId.substring(9);
         let walletPassword = $('#buy-item-unlock-password').val();
+        if (!walletPassword) {
+            error('Please provide a password.');
+            return;
+        }
         await buyItem(itemId, walletPassword);
         $('#buy-item-unlock-password').val('');
         addItemsForSaleToDom();
